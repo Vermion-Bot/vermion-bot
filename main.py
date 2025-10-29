@@ -17,7 +17,7 @@ async def on_ready():
     print(f"✅ {bot.user} Elindult!")
 
 async def load_cogs():
-    for filename in os.listdir("./vermion_bot/commands"):
+    for filename in os.listdir("./bot/commands"):
         if filename.endswith(".py") and filename != "__init__.py":
             await bot.load_extension(f"commands.{filename[:-3]}")
             print(f"✅ {filename} betöltve")

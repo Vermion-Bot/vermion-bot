@@ -1,5 +1,4 @@
 import psycopg2
-from psycopg2 import sql
 
 class DatabaseManager:
     def __init__(self, dbname, user, password, host="localhost", port="5432"):
