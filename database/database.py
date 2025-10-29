@@ -9,6 +9,7 @@ class DatabaseManager:
             'host': host,
             'port': port
         }
+        
         self.connection = None
         self.connect()
         self.create_table_if_not_exists()
