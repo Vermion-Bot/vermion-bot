@@ -15,7 +15,6 @@ class DatabaseManager:
         self.create_table_if_not_exists()
     
     def connect(self):
-        """Csatlakozás az adatbázishoz"""
         try:
             self.connection = psycopg2.connect(**self.connection_params)
             print("✅ Sikeresen csatlakozva a PostgreSQL adatbázishoz")
@@ -23,7 +22,6 @@ class DatabaseManager:
             print(f"❌ Hiba a csatlakozás során: {e}")
     
     def create_table_if_not_exists(self):
-        """Tábla létrehozása, ha nem létezik"""
         create_table_query = """
         CREATE TABLE IF NOT EXISTS guild_messages (
             guild_id BIGINT PRIMARY KEY,
@@ -39,7 +37,6 @@ class DatabaseManager:
             print(f"❌ Hiba a tábla létrehozása során: {e}")
     
     def get_guild_id(self, test_message):
-        """Guild ID lekérése a teszt üzenet alapján"""
         query = "SELECT guild_id FROM guild_messages WHERE test_message = %s"
         try:
             with self.connection.cursor() as cursor:
@@ -51,7 +48,6 @@ class DatabaseManager:
             return None
     
     def get_test_message(self, guild_id):
-        """Teszt üzenet lekérése a guild ID alapján"""
         query = "SELECT test_message FROM guild_messages WHERE guild_id = %s"
         try:
             with self.connection.cursor() as cursor:
@@ -63,7 +59,6 @@ class DatabaseManager:
             return None
     
     def insert_or_update_message(self, guild_id, test_message):
-        """Új bejegyzés beszúrása vagy frissítése"""
         query = """
         INSERT INTO guild_messages (guild_id, test_message) 
         VALUES (%s, %s)
@@ -81,7 +76,6 @@ class DatabaseManager:
             return False
     
     def close(self):
-        """Kapcsolat bezárása"""
         if self.connection:
             self.connection.close()
             print("✅ Kapcsolat bezárva")
