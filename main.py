@@ -15,6 +15,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 intents.voice_states = True
 intents.members = True
+intents.guilds = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 
@@ -28,9 +29,22 @@ db = DatabaseManager(
 
 bot.db = db
 
+def sync_bot_guilds():
+    guilds_data = []
+    for guild in bot.guilds:
+        guilds_data.append({
+            'id': guild.id,
+            'name': guild.name,
+            'member_count': guild.member_count
+        })
+    
+    db.sync_bot_guilds(guilds_data)
+
 @bot.event
 async def on_ready():
     await bot.tree.sync()
+    sync_bot_guilds()
+    
     print(f"""
     ╔══════════════════════════════════════════════╗
     ║  {bot.user} sikeresen elindult!           ║
@@ -42,7 +56,6 @@ async def on_ready():
     """)
 
 async def load_cogs():
-    """További cogok betöltése ha vannak"""
     cogs_path = Path(__file__).parent / "commands"
     if cogs_path.exists():
         for filename in os.listdir(cogs_path):
