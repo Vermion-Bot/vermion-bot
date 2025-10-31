@@ -31,13 +31,27 @@ bot.db = db
 @bot.event
 async def on_ready():
     await bot.tree.sync()
-    print(f"✅ {bot.user} Elindult!")
+    print(f"""
+    ╔══════════════════════════════════════════════╗
+    ║  {bot.user} sikeresen elindult!           ║
+    ╠══════════════════════════════════════════════╣
+    ║  🌐 Dashboard: http://localhost:8000        ║
+    ║  🔐 OAuth2 bejelentkezés aktív              ║
+    ║  📊 {len(bot.guilds)} szerver                              ║
+    ╚══════════════════════════════════════════════╝
+    """)
 
 async def load_cogs():
-    for filename in os.listdir("./bot/commands"):
-        if filename.endswith(".py") and filename != "__init__.py":
-            await bot.load_extension(f"commands.{filename[:-3]}")
-            print(f"✅ {filename} betöltve")
+    """További cogok betöltése ha vannak"""
+    cogs_path = Path(__file__).parent / "commands"
+    if cogs_path.exists():
+        for filename in os.listdir(cogs_path):
+            if filename.endswith(".py") and filename != "__init__.py":
+                try:
+                    await bot.load_extension(f"commands.{filename[:-3]}")
+                    print(f"✅ {filename} betöltve")
+                except Exception as e:
+                    print(f"❌ Hiba {filename} betöltése során: {e}")
 
 bot.setup_hook = load_cogs
 
